@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>风险测评工具</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .input-cell {
+            background-color: #e6f2ff;
+        }
+        .result-cell {
+            background-color: #ffe6cc;
+            font-weight: bold;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        select, input {
+            padding: 5px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        input[type="number"] {
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+    <h1>风险测评工具</h1>
+    
+    <div class="section">
+        <h2>使用说明</h2>
+        <p>1. 请填写或选择所有蓝色背景的单元格。</p>
+        <p>2. 橙色背景单元格为自动计算结果。</p>
+        <p>3. 计算结果仅供参考，并非投资建议。</p>
+    </div>
+
+    <div class="section">
+        <h2>一、客观风险承受能力评估</h2>
+        <table id="objective">
+            <tr>
+                <th width="30%">评估项目</th>
+                <th width="40%">您的选择</th>
+                <th width="30%">得分</th>
+            </tr>
+            <tr>
+                <td>年龄</td>
+                <td class="input-cell">
+                    <input type="number" id="age" min="18" max="100" value="18"> 岁
+                </td>
+                <td class="result-cell" id="ageScore">50</td>
+            </tr>
+            <tr>
+                <td>就业状况</td>
+                <td class="input-cell">
+                    <select id="employment">
+                        <option value="10">公职人员</option>
+                        <option value="8">工薪阶层</option>
+                        <option value="6">佣金收入者</option>
+                        <option value="4">自营事业者</option>
+                        <option value="2">失业者</option>
+                    </select>
+                </td>
+                <td class="result-cell" id="employmentScore">10</td>
+            </tr>
+            <tr>
+                <td>家庭负担</td>
+                <td class="input-cell">
+                    <select id="familyBurden">
+                        <option value="10">未婚</option>
+                        <option value="8">双薪无子女</option>
+                        <option value="6">双薪有子女</option>
+                        <option value="4">单薪有子女</option>
+                        <option value="2">单薪养三代</option>
+                    </select>
+                </td>
+                <td class="result-cell" id="familyBurdenScore">10</td>
+            </tr>
+            <tr>
+                <td>置产状况</td>
+                <td class="input-cell">
+                    <select id="property">
+                        <option value="10">投资不动产</option>
+                        <option value="8">自有住宅无房贷</option>
+                        <option value="6">房贷&lt;50%</option>
+                        <option value="4">房贷&gt;50%</option>
+                        <option value="2">无自有住宅</option>
+                    </select>
+                </td>
+                <td class="result-cell" id="propertyScore">10</td>
+            </tr>
+            <tr>
+                <td>投资经验</td>
+                <td class="input-cell">
+                    <select id="experience">
+                        <option value="10">10年以上</option>
+                        <option value="8">6-10年</option>
+                        <option value="6">2-5年</option>
+                        <option value="4">1年以内</option>
+                        <option value="2">无</option>
+                    </select>
+                </td>
+                <td class="result-cell" id="experienceScore">10</td>
+            </tr>
+            <tr>
+                <td>投资知识</td>
+                <td class="input-cell">
+                    <select id="knowledge">
+                        <option value="10">有专业执照</option>
+                        <option value="8">财经专业</option>
+                        <option value="6">自修有心得</option>
+                        <option value="4">略懂一些</option>
+                        <option value="2">一片空白</option>
+                    </select>
+                </td>
+                <td class="result-cell" id="knowledgeScore">10</td>
+            </tr>
+            <tr>
+                <td colspan="2"><strong>客观总得分</strong></td>
+                <td class="result-cell" id="objectiveTotal">90</td>
+            </tr>
+            <tr>
+                <td colspan="2"><strong>客观风险等级</strong></td>
+                <td class="result-cell" id="objectiveLevel">高风险承受能力</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>二、主观风险承受态度评估</h2>
+        <table id="subjective">
+            <tr>
+                <th width="30%">评估项目</th>
+                <th width="40%">您的选择</th>
+                <th width="30%">得分</th>
+            </tr>
+            <tr>
+                <td>本金损失容忍度(%)</td>
+                <td class="input-cell">
+                    <select id="tolerance">
+                        <option value="1">不能容忍任何损失</option>
+                        <option value="2">1%</option>
+                        <option value="3">2%</option>
+                        <option value="4">3%</option>
+                        <option value="5">4%</option>
+                        <option value="6">5%</option>
+                        <option value="7">6%</option>
+                        <option value="8">7%</option>
+                        <option value="9">8%</option>
+                        <option value="10">9%</option>
+                        <option value="11">10%</option>
+                        <option value="12">11%</option>
+                        <option value="13">12%</option>
+                        <option value="14">13%</option>
+                        <option value="15">14%</option>
+                        <option value="16">15%</option>
+                        <option value="17">16%</option>
+                        <option value="18">17%</option>
+                        <option value="19">18%</option>
+                        <option value="20">19%</option>
+                        <option value="21">20%</option>
+                        <option value="22">21%</option>
+                        <option value="23">22%</option>
+                        <option value="24">23%</option>
+                        <option value="25">24%</option>
+                        <option value="26">25%及以上</option>
+                    </select>
+                </td>
+                <td class="result-cell" id="toleranceScore">28</td>
+            </tr>
+            <tr>
+                <td>首要考虑因素</td>
+                <td class="input-cell">
+                    <select id="primaryFactor">
+                        <option value="10">赚取短期差价</option>
+                        <option value="8">长期利得</option>
+                        <option value="6">年现金收益</option>
+                        <option value="4">对抗通胀保值</option>
+                        <option value="2">保本保息</option>
+                    </select>
+                </td>
+                <td class="result-cell" id="primaryFactorScore">10</td>
+            </tr>
+            <tr>
+                <td>过去投资绩效</td>
+                <td class="input-cell">
+                    <select id="pastPerformance">
+                        <option value="10">只赚不赔</option>
+                        <option value="8">赚多赔少</option>
+                        <option value="6">损益两平</option>
+                        <option value="4">赚少赔多</option>
+                        <option value="2">只赔不赚</option>
+                    </select>
+                </td>
+                <td class="result-cell" id="pastPerformanceScore">10</td>
+            </tr>
+            <tr>
+                <td>赔钱心理状态</td>
+                <td class="input-cell">
+                    <select id="lossReaction">
+                        <option value="10">学习经验</option>
+                        <option value="8">照常生活</option>
+                        <option value="6">影响情绪小</option>
+                        <option value="4">影响情绪大</option>
+                        <option value="2">难以入眠</option>
+                    </select>
+                </td>
+                <td class="result-cell" id="lossReactionScore">10</td>
+            </tr>
+            <tr>
+                <td>当前主要投资</td>
+                <td class="input-cell">
+                    <select id="currentInvestment">
+                        <option value="10">期货</option>
+                        <option value="8">股票</option>
+                        <option value="6">房地产</option>
+                        <option value="4">债券</option>
+                        <option value="2">存款</option>
+                    </select>
+                </td>
+                <td class="result-cell" id="currentInvestmentScore">10</td>
+            </tr>
+            <tr>
+                <td>未来希望避免的投资工具</td>
+                <td class="input-cell">
+                    <select id="avoidInvestment">
+                        <option value="10">无</option>
+                        <option value="8">期货</option>
+                        <option value="6">股票</option>
+                        <option value="4">房地产</option>
+                        <option value="2">债券</option>
+                    </select>
+                </td>
+                <td class="result-cell" id="avoidInvestmentScore">10</td>
+            </tr>
+            <tr>
+                <td colspan="2"><strong>Part2得分</strong></td>
+                <td class="result-cell" id="part2Score">50</td>
+            </tr>
+            <tr>
+                <td colspan="2"><strong>主观总得分</strong></td>
+                <td class="result-cell" id="subjectiveTotal">78</td>
+            </tr>
+            <tr>
+                <td colspan="2"><strong>主观风险态度</strong></td>
+                <td class="result-cell" id="subjectiveLevel">中高风险承受态度</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>三、推荐投资组合</h2>
+        <table id="portfolio">
+            <tr>
+                <th width="50%">项目</th>
+                <th width="50%">数值</th>
+            </tr>
+            <tr>
+                <td>货币资产配置比例</td>
+                <td class="result-cell" id="cashRatio">0%</td>
+            </tr>
+            <tr>
+                <td>债券配置比例</td>
+                <td class="result-cell" id="bondRatio">50%</td>
+            </tr>
+            <tr>
+                <td>股票配置比例</td>
+                <td class="result-cell" id="stockRatio">50%</td>
+            </tr>
+            <tr>
+                <td>预期年收益</td>
+                <td class="result-cell" id="expectedReturn">12.5%</td>
+            </tr>
+            <tr>
+                <td>预期最大风险</td>
+                <td class="result-cell" id="maxRisk">-7.5%</td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        // 投资组合数据
+        const portfolioData = {
+            "低风险承受能力": {
+                "低风险承受态度": { cash: 0.7, bond: 0.2, stock: 0.1 },
+                "中低风险承受态度": { cash: 0.5, bond: 0.4, stock: 0.1 },
+                "中等风险承受态度": { cash: 0.4, bond: 0.4, stock: 0.2 },
+                "中高风险承受态度": { cash: 0.2, bond: 0.3, stock: 0.5 },
+                "高风险承受态度": { cash: 0, bond: 0.5, stock: 0.5 }
+            },
+            "中低风险承受能力": {
+                "低风险承受态度": { cash: 0.5, bond: 0.4, stock: 0.1 },
+                "中低风险承受态度": { cash: 0.4, bond: 0.4, stock: 0.2 },
+                "中等风险承受态度": { cash: 0.2, bond: 0.5, stock: 0.3 },
+                "中高风险承受态度": { cash: 0, bond: 0.5, stock: 0.5 },
+                "高风险承受态度": { cash: 0, bond: 0.4, stock: 0.6 }
+            },
+            "中等风险承受能力": {
+                "低风险承受态度": { cash: 0.4, bond: 0.4, stock: 0.2 },
+                "中低风险承受态度": { cash: 0.2, bond: 0.5, stock: 0.3 },
+                "中等风险承受态度": { cash: 0, bond: 0.5, stock: 0.5 },
+                "中高风险承受态度": { cash: 0, bond: 0.4, stock: 0.6 },
+                "高风险承受态度": { cash: 0, bond: 0.3, stock: 0.7 }
+            },
+            "中高风险承受能力": {
+                "低风险承受态度": { cash: 0.2, bond: 0.3, stock: 0.5 },
+                "中低风险承受态度": { cash: 0, bond: 0.5, stock: 0.5 },
+                "中等风险承受态度": { cash: 0, bond: 0.4, stock: 0.6 },
+                "中高风险承受态度": { cash: 0, bond: 0.3, stock: 0.7 },
+                "高风险承受态度": { cash: 0, bond: 0.2, stock: 0.8 }
+            },
+            "高风险承受能力": {
+                "低风险承受态度": { cash: 0, bond: 0.5, stock: 0.5 },
+                "中低风险承受态度": { cash: 0, bond: 0.4, stock: 0.6 },
+                "中等风险承受态度": { cash: 0, bond: 0.3, stock: 0.7 },
+                "中高风险承受态度": { cash: 0, bond: 0.2, stock: 0.8 },
+                "高风险承受态度": { cash: 0, bond: 0.1, stock: 0.9 }
+            }
+        };
+
+        // 获取风险等级
+        function getLevel(score, type) {
+            if (score < 20) return type === 'objective' ? '低风险承受能力' : '低风险承受态度';
+            if (score < 40) return type === 'objective' ? '中低风险承受能力' : '中低风险承受态度';
+            if (score < 60) return type === 'objective' ? '中等风险承受能力' : '中等风险承受态度';
+            if (score < 80) return type === 'objective' ? '中高风险承受能力' : '中高风险承受态度';
+            return type === 'objective' ? '高风险承受能力' : '高风险承受态度';
+        }
+
+        // 计算年龄得分
+        function calculateAgeScore(age) {
+            age = parseInt(age);
+            if (age <= 25) return 50;
+            if (age >= 75) return 0;
+            return 75 - age;
+        }
+
+        // 计算损失容忍度得分 (原G42公式：=(D42-1)*2)
+        function calculateToleranceScore(tolerance) {
+            tolerance = parseInt(tolerance);
+            return (tolerance - 1) * 2;
+        }
+
+        // 更新所有计算结果
+        function updateCalculations() {
+            // 客观部分
+            const age = document.getElementById('age').value;
+            const ageScore = calculateAgeScore(age);
+            document.getElementById('ageScore').textContent = ageScore;
+            
+            const employmentScore = parseInt(document.getElementById('employment').value);
+            document.getElementById('employmentScore').textContent = employmentScore;
+            
+            const familyBurdenScore = parseInt(document.getElementById('familyBurden').value);
+            document.getElementById('familyBurdenScore').textContent = familyBurdenScore;
+            
+            const propertyScore = parseInt(document.getElementById('property').value);
+            document.getElementById('propertyScore').textContent = propertyScore;
+            
+            const experienceScore = parseInt(document.getElementById('experience').value);
+            document.getElementById('experienceScore').textContent = experienceScore;
+            
+            const knowledgeScore = parseInt(document.getElementById('knowledge').value);
+            document.getElementById('knowledgeScore').textContent = knowledgeScore;
+            
+            const objectiveTotal = ageScore + employmentScore + familyBurdenScore + 
+                                 propertyScore + experienceScore + knowledgeScore;
+            document.getElementById('objectiveTotal').textContent = objectiveTotal;
+            
+            const objectiveLevel = getLevel(objectiveTotal, 'objective');
+            document.getElementById('objectiveLevel').textContent = objectiveLevel;
+            
+            // 主观部分
+            const tolerance = document.getElementById('tolerance').value;
+            const toleranceScore = calculateToleranceScore(tolerance);
+            document.getElementById('toleranceScore').textContent = toleranceScore;
+            
+            const primaryFactorScore = parseInt(document.getElementById('primaryFactor').value);
+            document.getElementById('primaryFactorScore').textContent = primaryFactorScore;
+            
+            const pastPerformanceScore = parseInt(document.getElementById('pastPerformance').value);
+            document.getElementById('pastPerformanceScore').textContent = pastPerformanceScore;
+            
+            const lossReactionScore = parseInt(document.getElementById('lossReaction').value);
+            document.getElementById('lossReactionScore').textContent = lossReactionScore;
+            
+            const currentInvestmentScore = parseInt(document.getElementById('currentInvestment').value);
+            document.getElementById('currentInvestmentScore').textContent = currentInvestmentScore;
+            
+            const avoidInvestmentScore = parseInt(document.getElementById('avoidInvestment').value);
+            document.getElementById('avoidInvestmentScore').textContent = avoidInvestmentScore;
+            
+            // 计算Part2得分 (原D58)
+            const part2Score = primaryFactorScore + pastPerformanceScore + 
+                             lossReactionScore + currentInvestmentScore + avoidInvestmentScore;
+            document.getElementById('part2Score').textContent = part2Score;
+            
+            // 计算主观总得分 (原D60 = G42 + D58)
+            const subjectiveTotal = toleranceScore + part2Score;
+            document.getElementById('subjectiveTotal').textContent = subjectiveTotal;
+            
+            const subjectiveLevel = getLevel(subjectiveTotal, 'subjective');
+            document.getElementById('subjectiveLevel').textContent = subjectiveLevel;
+            
+            // 更新推荐组合
+            updatePortfolioRecommendation(objectiveLevel, subjectiveLevel);
+        }
+
+        // 更新推荐投资组合
+        function updatePortfolioRecommendation(objectiveLevel, subjectiveLevel) {
+            // 确保风险等级有效
+            if (!portfolioData[objectiveLevel] || !portfolioData[objectiveLevel][subjectiveLevel]) {
+                console.error("无效的风险等级组合:", objectiveLevel, subjectiveLevel);
+                return;
+            }
+            
+            const portfolio = portfolioData[objectiveLevel][subjectiveLevel];
+            const cashRatio = portfolio.cash;
+            const bondRatio = portfolio.bond;
+            const stockRatio = portfolio.stock;
+            
+            document.getElementById('cashRatio').textContent = `${(cashRatio * 100).toFixed(0)}%`;
+            document.getElementById('bondRatio').textContent = `${(bondRatio * 100).toFixed(0)}%`;
+            document.getElementById('stockRatio').textContent = `${(stockRatio * 100).toFixed(0)}%`;
+            
+            // 计算预期年收益 (D65*1.5% + D66*4% + D67*20%)
+            const expectedReturn = (cashRatio * 1.5 + bondRatio * 4 + stockRatio * 20).toFixed(1);
+            document.getElementById('expectedReturn').textContent = `${expectedReturn}%`;
+            
+            // 计算预期最大风险 (D66*-1% + D67*-15% + D65*1%)
+            const maxRisk = (bondRatio * -1 + stockRatio * -15 + cashRatio * 1).toFixed(1);
+            document.getElementById('maxRisk').textContent = `${maxRisk}%`;
+        }
+
+        // 初始化事件监听
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为所有下拉菜单和输入框添加事件监听
+            document.getElementById('age').addEventListener('input', updateCalculations);
+            
+            const selects = document.querySelectorAll('select');
+            selects.forEach(select => {
+                select.addEventListener('change', updateCalculations);
+            });
+            
+            // 设置初始值以匹配Excel示例
+            document.getElementById('tolerance').value = "15";
+            document.getElementById('primaryFactor').selectedIndex = 0;
+            document.getElementById('pastPerformance').selectedIndex = 0;
+            document.getElementById('lossReaction').selectedIndex = 0;
+            document.getElementById('currentInvestment').selectedIndex = 0;
+            document.getElementById('avoidInvestment').selectedIndex = 0;
+            
+            // 初始计算
+            updateCalculations();
+        });
+    </script>
+	<p>本表由财菲学院制作，公众号【财菲】</p>
+</body>
+</html>
